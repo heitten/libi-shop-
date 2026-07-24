@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Customers — Textile Shop Manager</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/tables.css">
+<link rel="stylesheet" href="css/forms.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <main class="main-content">
+    <div class="section-head">
+      <div><h2>Customers</h2><div class="sub" id="customer-count-sub"></div></div>
+      <button class="btn btn-primary" id="add-customer-btn"><i class="fa-solid fa-user-plus"></i> Add Customer</button>
+    </div>
+    <div class="filter-bar">
+      <div class="input-icon-wrap filter-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="customer-search" placeholder="Search by name or phone...">
+      </div>
+      <select id="customer-balance-filter">
+        <option value="">All Customers</option>
+        <option value="due">With Outstanding Balance</option>
+      </select>
+    </div>
+    <div class="table-wrap scrollx">
+      <table class="data-table">
+        <thead><tr><th>Customer</th><th>Phone</th><th>Total Purchases</th><th>Outstanding</th><th></th></tr></thead>
+        <tbody id="customers-tbody"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script src="js/customers.js"></script>
+</body>
+</html>

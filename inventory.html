@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Inventory — Textile Shop Manager</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/tables.css">
+<link rel="stylesheet" href="css/forms.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <main class="main-content">
+
+    <div class="kpi-grid" id="inv-kpi-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px,1fr));"></div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="live"><i class="fa-solid fa-boxes-stacked"></i> Live Inventory</button>
+      <button class="tab-btn" data-tab="history"><i class="fa-solid fa-clock-rotate-left"></i> Stock History</button>
+    </div>
+
+    <div id="live-panel">
+      <div class="section-head">
+        <div><h2>Live Inventory</h2><div class="sub" id="live-count-sub"></div></div>
+        <button class="btn btn-primary" id="stock-move-btn"><i class="fa-solid fa-right-left"></i> Stock Movement</button>
+      </div>
+      <div class="filter-bar">
+        <div class="input-icon-wrap filter-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="inv-search" placeholder="Search products...">
+        </div>
+        <select id="inv-category"><option value="">All Categories</option></select>
+        <select id="inv-status">
+          <option value="">All Stock Status</option>
+          <option value="in">In Stock</option>
+          <option value="low">Low Stock</option>
+          <option value="out">Out of Stock</option>
+        </select>
+      </div>
+      <div class="table-wrap scrollx">
+        <table class="data-table">
+          <thead><tr><th>Product</th><th>Category</th><th>Rack</th><th>Stock</th><th>Min Stock</th><th>Value</th><th>Status</th><th></th></tr></thead>
+          <tbody id="live-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="history-panel" class="hidden">
+      <div class="section-head">
+        <div><h2>Stock Movement History</h2><div class="sub" id="history-count-sub"></div></div>
+      </div>
+      <div class="filter-bar">
+        <div class="input-icon-wrap filter-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="hist-search" placeholder="Search by product...">
+        </div>
+        <select id="hist-type">
+          <option value="">All Types</option>
+          <option value="in">Stock In</option>
+          <option value="out">Stock Out</option>
+          <option value="adjustment">Adjustment</option>
+          <option value="damaged">Damaged</option>
+          <option value="returned">Returned</option>
+        </select>
+        <input type="date" id="hist-date">
+      </div>
+      <div class="table-wrap scrollx">
+        <table class="data-table">
+          <thead><tr><th>Date</th><th>Product</th><th>Type</th><th>Qty</th><th>Balance After</th><th>Reason</th></tr></thead>
+          <tbody id="history-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script src="js/inventory.js"></script>
+</body>
+</html>

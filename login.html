@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Login — Textile Shop Manager</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/forms.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+<div class="login-page">
+  <div class="login-card scale-in">
+    <div class="login-brand">
+      <div class="brand-logo" style="margin:0 auto;"><i class="fa-solid fa-shirt"></i></div>
+      <h1 id="shop-name-title">Textile Shop Manager</h1>
+      <p>Sign in to manage your shop</p>
+    </div>
+
+    <div class="login-tabs">
+      <div class="login-tab active" data-mode="owner">Owner</div>
+      <div class="login-tab" data-mode="employee">Employee</div>
+      <div class="login-tab" data-mode="pin">PIN</div>
+    </div>
+
+    <form id="password-form">
+      <div class="form-group">
+        <label>Username <span class="req">*</span></label>
+        <div class="input-icon-wrap">
+          <i class="fa-solid fa-user"></i>
+          <input type="text" id="username" placeholder="Enter username" autocomplete="username" required>
+        </div>
+        <div class="field-error" id="err-username">Username is required</div>
+      </div>
+      <div class="form-group">
+        <label>Password <span class="req">*</span></label>
+        <div class="input-icon-wrap">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="password" placeholder="Enter password" autocomplete="current-password" required>
+        </div>
+        <div class="field-error" id="err-password">Password is required</div>
+      </div>
+      <div class="flex-between mb-10">
+        <div class="checkbox-row">
+          <input type="checkbox" id="remember-me">
+          <label for="remember-me">Remember me</label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="login-submit-btn">
+        <i class="fa-solid fa-right-to-bracket"></i> Sign In
+      </button>
+    </form>
+
+    <div id="pin-form" class="hidden">
+      <div class="pin-dots" id="pin-dots">
+        <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+      </div>
+      <div class="pin-pad" id="pin-pad">
+        <button class="pin-key" data-key="1">1</button>
+        <button class="pin-key" data-key="2">2</button>
+        <button class="pin-key" data-key="3">3</button>
+        <button class="pin-key" data-key="4">4</button>
+        <button class="pin-key" data-key="5">5</button>
+        <button class="pin-key" data-key="6">6</button>
+        <button class="pin-key" data-key="7">7</button>
+        <button class="pin-key" data-key="8">8</button>
+        <button class="pin-key" data-key="9">9</button>
+        <button class="pin-key" data-key="clear"><i class="fa-solid fa-xmark"></i></button>
+        <button class="pin-key" data-key="0">0</button>
+        <button class="pin-key" data-key="back"><i class="fa-solid fa-delete-left"></i></button>
+      </div>
+    </div>
+
+    <div class="demo-creds" id="demo-creds">
+      <b>Demo Login</b><br>
+      Owner: owner / owner123 &nbsp;·&nbsp; Employee: staff / staff123 &nbsp;·&nbsp; PIN: 1234
+    </div>
+    <p class="login-hint">All data is stored locally in your browser. No internet or server required.</p>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+  Storage.seedIfEmpty();
+  App.applyTheme();
+
+  const settings = Storage.getSettings();
+  document.getElementById("shop-name-title").textContent = settings.shopName || "Textile Shop Manager";
+
+  if (Storage.getSession()) {
+    window.location.replace("dashboard.html");
+  }
+
+  let mode = "owner";
+  const tabs = document.querySelectorAll(".login-tab");
+  const passwordForm = document.getElementById("password-form");
+  const pinForm = document.getElementById("pin-form");
+  const usernameInput = document.getElementById("username");
+
+  usernameInput.value = Auth.getRememberedUsername();
+  if (usernameInput.value) document.getElementById("remember-me").checked = true;
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+      mode = tab.dataset.mode;
+      if (mode === "pin") {
+        passwordForm.classList.add("hidden");
+        pinForm.classList.remove("hidden");
+        resetPin();
+      } else {
+        passwordForm.classList.remove("hidden");
+        pinForm.classList.add("hidden");
+      }
+    });
+  });
+
+  passwordForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = usernameInput.value.trim();
+    const password = document.getElementById("password").value;
+    document.getElementById("err-username").classList.remove("show");
+    document.getElementById("err-password").classList.remove("show");
+    let valid = true;
+    if (!username) { document.getElementById("err-username").classList.add("show"); valid = false; }
+    if (!password) { document.getElementById("err-password").classList.add("show"); valid = false; }
+    if (!valid) return;
+
+    try {
+      Auth.login({ mode, username, password, remember: document.getElementById("remember-me").checked });
+      App.toast("Welcome back!", "success");
+      setTimeout(() => window.location.href = "dashboard.html", 400);
+    } catch (err) {
+      App.toast(err.message, "error");
+    }
+  });
+
+  let pinValue = "";
+  function resetPin() {
+    pinValue = "";
+    renderPinDots();
+  }
+  function renderPinDots() {
+    const dots = document.querySelectorAll(".pin-dot");
+    dots.forEach((d, i) => d.classList.toggle("filled", i < pinValue.length));
+  }
+  document.getElementById("pin-pad").addEventListener("click", (e) => {
+    const btn = e.target.closest(".pin-key");
+    if (!btn) return;
+    const key = btn.dataset.key;
+    if (key === "clear") { resetPin(); return; }
+    if (key === "back") { pinValue = pinValue.slice(0, -1); renderPinDots(); return; }
+    if (pinValue.length >= 6) return;
+    pinValue += key;
+    renderPinDots();
+    if (pinValue.length >= 4) {
+      setTimeout(() => {
+        try {
+          Auth.login({ mode: "pin", pin: pinValue, remember: false });
+          App.toast("Welcome back!", "success");
+          setTimeout(() => window.location.href = "dashboard.html", 350);
+        } catch (err) {
+          App.toast(err.message, "error");
+          resetPin();
+        }
+      }, 150);
+    }
+  });
+</script>
+</body>
+</html>

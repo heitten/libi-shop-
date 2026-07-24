@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Settings — Textile Shop Manager</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/tables.css">
+<link rel="stylesheet" href="css/forms.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/mobile.css">
+<style>
+  .cat-tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .cat-tag { display: flex; align-items: center; gap: 8px; background: var(--surface-2); padding: 7px 12px; border-radius: 20px; font-size: 12.5px; font-weight: 600; }
+  .cat-tag button { background: none; border: none; color: var(--text-muted); font-size: 12px; }
+  .danger-zone { border: 1.5px dashed var(--danger); border-radius: var(--radius); padding: 16px; }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <main class="main-content">
+
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="profile"><i class="fa-solid fa-store"></i> Shop Profile</button>
+      <button class="tab-btn" data-tab="users"><i class="fa-solid fa-user-shield"></i> Users & Access</button>
+      <button class="tab-btn" data-tab="categories"><i class="fa-solid fa-tags"></i> Categories</button>
+      <button class="tab-btn" data-tab="data"><i class="fa-solid fa-database"></i> Backup & Data</button>
+    </div>
+
+    <div id="profile-panel">
+      <div class="card" style="max-width:640px;">
+        <h2 class="mb-10">Shop Profile</h2>
+        <div class="form-group">
+          <label>Shop Logo</label>
+          <div class="image-upload" id="logo-upload-box">
+            <i class="fa-solid fa-image"></i><span>Click to upload logo</span>
+            <input type="file" accept="image/*" id="logo-input">
+          </div>
+        </div>
+        <div class="form-group"><label>Shop Name <span class="req">*</span></label><input type="text" id="s-shopname"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Owner Name</label><input type="text" id="s-ownername"></div>
+          <div class="form-group"><label>Phone</label><input type="tel" id="s-phone"></div>
+        </div>
+        <div class="form-group"><label>Address</label><textarea id="s-address"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>Currency</label>
+            <select id="s-currency">
+              <option value="INR">Indian Rupee (₹)</option>
+              <option value="USD">US Dollar ($)</option>
+              <option value="AED">UAE Dirham (AED)</option>
+              <option value="SAR">Saudi Riyal (SAR)</option>
+              <option value="PKR">Pakistani Rupee (₨)</option>
+              <option value="BDT">Bangladeshi Taka (৳)</option>
+              <option value="GBP">British Pound (£)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Tax % (Default)</label><input type="number" id="s-tax" min="0" max="100" step="0.01"></div>
+        </div>
+        <div class="flex-between mt-16">
+          <div>
+            <label style="margin-bottom:0;">Dark Mode</label>
+            <div class="text-muted" style="font-size:11.5px;">Switch between light and dark theme</div>
+          </div>
+          <label class="toggle-switch"><input type="checkbox" id="s-darkmode"><span class="toggle-slider"></span></label>
+        </div>
+        <button class="btn btn-primary mt-16" id="save-profile-btn"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+      </div>
+    </div>
+
+    <div id="users-panel" class="hidden">
+      <div class="section-head">
+        <div><h2>Users & Access</h2><div class="sub">Manage owner and employee login accounts</div></div>
+        <button class="btn btn-primary" id="add-user-btn"><i class="fa-solid fa-user-plus"></i> Add User</button>
+      </div>
+      <div class="table-wrap scrollx">
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Role</th><th>Username</th><th>PIN</th><th>Phone</th><th></th></tr></thead>
+          <tbody id="users-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="categories-panel" class="hidden">
+      <div class="card mb-10">
+        <h2 class="mb-10">Product Categories</h2>
+        <div class="flex gap-10">
+          <input type="text" id="new-category-input" placeholder="New category name">
+          <button class="btn btn-primary" id="add-category-btn"><i class="fa-solid fa-plus"></i> Add</button>
+        </div>
+        <div class="cat-tag-list" id="category-list"></div>
+      </div>
+      <div class="card">
+        <h2 class="mb-10">Expense Categories</h2>
+        <div class="flex gap-10">
+          <input type="text" id="new-exp-category-input" placeholder="New expense category name">
+          <button class="btn btn-primary" id="add-exp-category-btn"><i class="fa-solid fa-plus"></i> Add</button>
+        </div>
+        <div class="cat-tag-list" id="exp-category-list"></div>
+      </div>
+    </div>
+
+    <div id="data-panel" class="hidden">
+      <div class="card mb-10">
+        <h2 class="mb-10">Backup & Restore</h2>
+        <p class="text-muted">Export your entire shop database as a JSON backup file, or restore from a previous backup. All data is stored locally in your browser.</p>
+        <div class="flex gap-10 mt-16" style="flex-wrap:wrap;">
+          <button class="btn btn-primary" id="export-backup-btn"><i class="fa-solid fa-download"></i> Download Backup</button>
+          <label class="btn btn-ghost" for="restore-input" style="cursor:pointer;"><i class="fa-solid fa-upload"></i> Restore Backup</label>
+          <input type="file" id="restore-input" accept=".json" class="hidden">
+        </div>
+      </div>
+      <div class="card danger-zone">
+        <h2 class="mb-10 text-danger">Danger Zone</h2>
+        <p class="text-muted">Permanently erase all shop data from this browser. This cannot be undone. Consider exporting a backup first.</p>
+        <button class="btn btn-danger mt-16" id="reset-data-btn"><i class="fa-solid fa-triangle-exclamation"></i> Reset All Data</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script src="js/settings.js"></script>
+</body>
+</html>

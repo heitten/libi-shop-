@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Sales / POS — Textile Shop Manager</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/tables.css">
+<link rel="stylesheet" href="css/forms.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/mobile.css">
+<style>
+  .pos-grid { display: grid; grid-template-columns: 1fr 380px; gap: 16px; align-items: flex-start; }
+  .pos-products { min-height: 400px; min-width: 0; }
+  .cat-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 12px; }
+  .pos-product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+  .pos-product-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px; cursor: pointer; transition: transform .1s, box-shadow .15s; text-align: center; }
+  .pos-product-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+  .pos-product-card .ppc-img { height: 70px; background: var(--surface-2); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: var(--text-muted); margin-bottom: 8px; overflow: hidden; }
+  .pos-product-card .ppc-img img { width: 100%; height: 100%; object-fit: cover; }
+  .pos-product-card .ppc-name { font-size: 12px; font-weight: 700; line-height: 1.3; min-height: 32px; }
+  .pos-product-card .ppc-price { font-size: 13px; font-weight: 800; color: var(--primary); margin-top: 4px; }
+  .pos-product-card.disabled { opacity: .4; cursor: not-allowed; }
+  .cart-panel { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: 16px; position: sticky; top: 80px; min-width: 0; }
+  .cart-items { max-height: 300px; overflow-y: auto; margin: 10px 0; }
+  .cart-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .cart-item:last-child { border-bottom: none; }
+  .cart-item .ci-name { font-size: 12.5px; font-weight: 700; }
+  .cart-item .ci-price { font-size: 11px; color: var(--text-muted); }
+  .cart-item .ci-qty { display: flex; align-items: center; gap: 4px; }
+  .cart-item .ci-qty button { width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface-2); font-size: 12px; }
+  .cart-item .ci-total { font-size: 12.5px; font-weight: 700; min-width: 60px; text-align: right; }
+  .cart-summary-row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; color: var(--text-muted); }
+  .cart-summary-row.total { font-size: 17px; font-weight: 800; color: var(--text); border-top: 1px solid var(--border); margin-top: 6px; padding-top: 10px; }
+  .pay-method-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
+  .pay-method-btn { padding: 10px 4px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); background: var(--surface-2); font-size: 11px; font-weight: 700; text-align: center; }
+  .pay-method-btn.active { border-color: var(--primary); background: rgba(108,92,231,.1); color: var(--primary); }
+  .pay-method-btn i { display: block; font-size: 16px; margin-bottom: 4px; }
+  .mobile-cart-bar { display: none; }
+  @media (max-width: 1080px) {
+    .pos-grid { grid-template-columns: 1fr; }
+    .cart-panel { position: static; }
+  }
+  .receipt-box { font-family: 'Courier New', monospace; font-size: 12.5px; background: #fff; color: #000; padding: 16px; border-radius: 10px; }
+  .receipt-box hr { border: none; border-top: 1px dashed #999; margin: 8px 0; }
+  .receipt-row { display: flex; justify-content: space-between; }
+  .receipt-items td { padding: 2px 0; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <main class="main-content">
+
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="pos"><i class="fa-solid fa-cash-register"></i> New Sale</button>
+      <button class="tab-btn" data-tab="history"><i class="fa-solid fa-receipt"></i> Sales History</button>
+    </div>
+
+    <div id="pos-panel">
+      <div class="pos-grid">
+        <div class="pos-products card">
+          <div class="input-icon-wrap mb-10">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="pos-search" placeholder="Search products by name, SKU, barcode...">
+          </div>
+          <div class="cat-chips" id="cat-chips"></div>
+          <div class="pos-product-grid" id="pos-product-grid"></div>
+        </div>
+
+        <div class="cart-panel">
+          <div class="flex-between">
+            <h3 style="font-size:15px;"><i class="fa-solid fa-cart-shopping"></i> Current Sale</h3>
+            <button class="btn btn-ghost btn-sm" id="clear-cart-btn"><i class="fa-solid fa-trash"></i> Clear</button>
+          </div>
+          <div class="form-group mt-10">
+            <label>Customer</label>
+            <select id="pos-customer"></select>
+          </div>
+          <div class="cart-items" id="cart-items"><div class="empty-state"><i class="fa-solid fa-cart-shopping"></i><p>Cart is empty</p></div></div>
+
+          <div class="form-row" style="grid-template-columns: 1fr 1fr;">
+            <div class="form-group">
+              <label>Discount</label>
+              <input type="number" id="pos-discount" min="0" value="0">
+            </div>
+            <div class="form-group">
+              <label>Tax %</label>
+              <input type="number" id="pos-tax" min="0" value="0">
+            </div>
+          </div>
+
+          <div class="cart-summary-row"><span>Subtotal</span><span id="sum-subtotal">₹0.00</span></div>
+          <div class="cart-summary-row"><span>Discount</span><span id="sum-discount">-₹0.00</span></div>
+          <div class="cart-summary-row"><span>Tax</span><span id="sum-tax">+₹0.00</span></div>
+          <div class="cart-summary-row total"><span>Total</span><span id="sum-total">₹0.00</span></div>
+
+          <label class="mt-10">Payment Method</label>
+          <div class="pay-method-grid">
+            <button class="pay-method-btn active" data-method="cash"><i class="fa-solid fa-money-bill"></i>Cash</button>
+            <button class="pay-method-btn" data-method="card"><i class="fa-solid fa-credit-card"></i>Card</button>
+            <button class="pay-method-btn" data-method="bank"><i class="fa-solid fa-building-columns"></i>Bank</button>
+            <button class="pay-method-btn" data-method="split"><i class="fa-solid fa-code-compare"></i>Split</button>
+          </div>
+
+          <div id="split-fields" class="hidden">
+            <div class="form-row" style="grid-template-columns: 1fr 1fr 1fr;">
+              <div class="form-group"><label>Cash</label><input type="number" id="split-cash" min="0" value="0"></div>
+              <div class="form-group"><label>Card</label><input type="number" id="split-card" min="0" value="0"></div>
+              <div class="form-group"><label>Bank</label><input type="number" id="split-bank" min="0" value="0"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Amount Paid</label>
+            <input type="number" id="pos-amount-paid" min="0" value="0">
+          </div>
+
+          <button class="btn btn-primary btn-block" id="complete-sale-btn"><i class="fa-solid fa-check"></i> Complete Sale</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="history-panel" class="hidden">
+      <div class="section-head">
+        <div><h2>Sales History</h2><div class="sub" id="sales-count-sub"></div></div>
+      </div>
+      <div class="filter-bar">
+        <div class="input-icon-wrap filter-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="sales-search" placeholder="Search by invoice number...">
+        </div>
+        <select id="sales-status-filter">
+          <option value="">All Status</option>
+          <option value="completed">Completed</option>
+          <option value="returned">Returned</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <input type="date" id="sales-date-filter">
+      </div>
+      <div class="table-wrap scrollx">
+        <table class="data-table">
+          <thead><tr><th>Invoice</th><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Balance</th><th>Status</th><th></th></tr></thead>
+          <tbody id="sales-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script src="js/sales.js"></script>
+</body>
+</html>

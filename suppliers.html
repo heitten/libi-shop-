@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Suppliers — Textile Shop Manager</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/tables.css">
+<link rel="stylesheet" href="css/forms.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/mobile.css">
+<style>
+  .purchase-item-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 8px; align-items: center; margin-bottom: 8px; }
+  @media (max-width: 640px) { .purchase-item-row { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<div class="app-shell" id="app-shell">
+  <main class="main-content">
+
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="suppliers"><i class="fa-solid fa-truck"></i> Suppliers</button>
+      <button class="tab-btn" data-tab="purchases"><i class="fa-solid fa-cart-flatbed"></i> Purchase History</button>
+    </div>
+
+    <div id="suppliers-panel">
+      <div class="section-head">
+        <div><h2>Suppliers</h2><div class="sub" id="supplier-count-sub"></div></div>
+        <button class="btn btn-primary" id="add-supplier-btn"><i class="fa-solid fa-plus"></i> Add Supplier</button>
+      </div>
+      <div class="filter-bar">
+        <div class="input-icon-wrap filter-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="supplier-search" placeholder="Search suppliers...">
+        </div>
+      </div>
+      <div class="table-wrap scrollx">
+        <table class="data-table">
+          <thead><tr><th>Supplier</th><th>Phone</th><th>Products Supplied</th><th>Due Payments</th><th></th></tr></thead>
+          <tbody id="suppliers-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="purchases-panel" class="hidden">
+      <div class="section-head">
+        <div><h2>Purchase History</h2><div class="sub" id="purchase-count-sub"></div></div>
+        <button class="btn btn-primary" id="add-purchase-btn"><i class="fa-solid fa-plus"></i> Record Purchase</button>
+      </div>
+      <div class="filter-bar">
+        <select id="purchase-supplier-filter"><option value="">All Suppliers</option></select>
+        <input type="date" id="purchase-date-filter">
+      </div>
+      <div class="table-wrap scrollx">
+        <table class="data-table">
+          <thead><tr><th>Invoice</th><th>Date</th><th>Supplier</th><th>Items</th><th>Total Cost</th><th>Due</th><th></th></tr></thead>
+          <tbody id="purchases-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script src="js/suppliers.js"></script>
+</body>
+</html>
