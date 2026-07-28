@@ -1,0 +1,304 @@
+:root {
+  --bg: #0e141b;
+  --panel: #1a232c;
+  --panel-2: #212c37;
+  --border: #2c3947;
+  --text: #e7edf3;
+  --text-dim: #8b98a5;
+  --accent: #4aa3ff;
+  --green: #3ecf6e;
+  --orange: #e08a3c;
+  --blue: #3c8ee0;
+  --brown: #b5672e;
+  --purple: #9a7fd1;
+  --red: #e0483c;
+  --empty: #3a4552;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ---------- Header ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 18px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.brand .name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+}
+.brand .sub {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+
+.topbar .datetime {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.topbar .spacer { flex: 1; }
+
+.vessel-badge {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 6px;
+}
+.nav-links a {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  border: 1px solid transparent;
+}
+.nav-links a.active, .nav-links a:hover {
+  color: var(--text);
+  background: var(--panel-2);
+  border-color: var(--border);
+}
+
+/* ---------- Tabs ---------- */
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 10px 18px 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+  flex-wrap: wrap;
+}
+.tab-btn {
+  padding: 10px 18px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: var(--text-dim);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ---------- Main content ---------- */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 18px;
+}
+
+.group-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  margin: 22px 0 10px;
+}
+.group-title:first-child { margin-top: 0; }
+
+.tank-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+/* ---------- Tank card ---------- */
+.tank-card {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tank-card.alarm {
+  border-color: var(--red);
+  box-shadow: 0 0 0 1px var(--red) inset;
+}
+.tank-card .tk-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.tk-name .unverified {
+  color: var(--red);
+  font-size: 0.65rem;
+  border: 1px solid var(--red);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+.tank-card .tk-body {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+.gauge {
+  width: 22px;
+  border-radius: 4px;
+  background: var(--empty);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.gauge .fill {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  border-radius: 4px 4px 0 0;
+  transition: height .3s ease;
+}
+.tk-stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  flex: 1;
+}
+.tk-stats b {
+  color: var(--text);
+  font-size: 0.85rem;
+  display: block;
+}
+.tk-stats .stat { margin-bottom: 2px; }
+.tk-meta {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  border-top: 1px dashed var(--border);
+  padding-top: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ---------- Forms ---------- */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+label { font-size: 0.8rem; color: var(--text-dim); display: block; margin-bottom: 4px; }
+input[type=text], input[type=number], input[type=date], select {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 100%;
+}
+button {
+  background: var(--accent);
+  color: #04121f;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+button.secondary {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+button.danger { background: var(--red); color: #fff; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+table th, table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+table th { color: var(--text-dim); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; }
+
+.sounding-row {
+  display: grid;
+  grid-template-columns: 1.4fr 90px 1fr 1.4fr;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.sounding-row .name { font-size: 0.85rem; font-weight: 600; }
+.sounding-row .cap { font-size: 0.7rem; color: var(--text-dim); }
+.sounding-row .result { font-size: 0.75rem; color: var(--text-dim); }
+
+.toast {
+  position: fixed;
+  bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--green);
+  color: #04231a;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+  z-index: 50;
+}
+.toast.show { opacity: 1; }
+
+.badge-verify {
+  display: inline-block;
+  font-size: 0.65rem;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--red);
+  color: var(--red);
+}
+.badge-ok {
+  display: inline-block;
+  font-size: 0.65rem;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--green);
+  color: var(--green);
+}
+
+.hint { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+
+@media (max-width: 700px) {
+  .sounding-row { grid-template-columns: 1fr; }
+  .topbar { gap: 10px; }
+}

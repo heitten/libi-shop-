@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAWABI Tank Monitor</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="name">RAWABI Tank Monitor</div>
+    <div class="sub">Sounding-based tank monitoring</div>
+  </div>
+  <div class="datetime" id="clock"></div>
+  <div class="spacer"></div>
+  <div class="nav-links">
+    <a href="index.html" class="active">Dashboard</a>
+    <a href="sounding.html">Daily Sounding</a>
+    <a href="history.html">History</a>
+    <a href="settings.html">Settings</a>
+  </div>
+  <div class="vessel-badge">RAWABI</div>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="container">
+  <div id="unverifiedNotice"></div>
+  <div id="content"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/calc.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
