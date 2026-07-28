@@ -27,10 +27,15 @@ const Store = {
     const overrides = Store.getOverrides();
     return DEFAULT_TANKS.map(t => {
       const o = overrides[t.id] || {};
+      const defaultCalibration = SOUNDING_TABLES[t.id]
+        ? SOUNDING_TABLES[t.id].map(([sounding, volume]) => ({ sounding, volume }))
+        : null;
+      const calibration = o.calibration || defaultCalibration;
       return Object.assign({}, t, o, {
-        mode: o.mode || 'percent',
+        mode: o.mode || (calibration ? 'cm' : 'percent'),
         maxSounding: o.maxSounding != null ? o.maxSounding : null,
-        calibration: o.calibration || null, // [{sounding, volume}, ...]
+        calibration, // [{sounding, volume}, ...]
+        hasFactoryCalibration: !!defaultCalibration,
       });
     });
   },

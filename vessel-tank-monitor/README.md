@@ -32,14 +32,29 @@ capacity plan and re-save in Settings, which clears the flag.
 
 ## Sounding → Volume conversion
 
-- **% Full** needs no setup: `Volume = (%/100) × Capacity`.
-- **Sounding (cm)** needs a **Max Sounding depth** (or a full multi-point
-  calibration curve) entered per tank in Settings — until then, cm mode
-  is disabled for that tank. With only a Max Sounding depth, volume is
-  interpolated **linearly** between empty and full, which is an
-  approximation for tanks with sloped or curved surfaces (peak tanks,
-  double bottoms). Add real sounding-table points in the "Advanced
-  calibration" field per tank for an exact piecewise-linear curve instead.
+- **Calibrated tanks** (marked "· calibrated" on the dashboard, 26 of 47
+  tanks — all 7 Fresh Water tanks, all 16 Drill Water/Ballast tanks, Foam,
+  Detergent, and No.1 Fuel Oil (P)) use the vessel's real, official
+  **Tank Sounding Tables (R14)** — exact 0.10m-increment sounding→volume
+  points transcribed from `Sounding_table_R14_part_1.pdf` /
+  `_part_2.pdf`, stored in `js/soundingTables.js`. Entering a sounding in
+  metres for these tanks looks up/interpolates between the real printed
+  points — the same numbers your paper sounding table would give. Tables
+  are at "No Trim, No Heel" except FO1.P, which is at "Trim: aft 2.000m"
+  (the only Fuel Oil trim condition available so far).
+- **Not yet calibrated** (Fuel Oil tanks other than No.1 P, all 4 Mud
+  tanks, Bilge Holding, Dirty Oil, Hyd. Oil, Lub. Oil): the source PDFs'
+  table of contents shows the full booklet runs 200+ pages, with each
+  Fuel Oil tank alone spanning ~16 pages across multiple trim conditions,
+  and Mud/Bilge/Dirty/Hyd/Lub tanks aren't in the two uploaded files at
+  all. These tanks use **% Full** (`Volume = (%/100) × Capacity`, no
+  setup needed) until real sounding-table pages for them are provided —
+  upload them and I'll wire them in the same way. A **Sounding (cm)**
+  mode is also available per tank once you set a **Max Sounding depth**
+  in Settings, which interpolates **linearly** between empty and full —
+  a reasonable approximation, not an exact curve.
+- Any calibration (factory or your own) can be overridden per tank in
+  Settings — edit the "Advanced calibration" points and Save.
 
 ## Backup
 

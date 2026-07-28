@@ -61,7 +61,7 @@ function tankCardHTML(tank, reading, entry, groupColor) {
         </div>
       </div>
       <div class="tk-meta">
-        <span>Cap: ${fmt(tank.capacity, 1)} m³</span>
+        <span>Cap: ${fmt(tank.capacity, 1)} m³ ${tank.hasFactoryCalibration ? '· calibrated' : ''}</span>
         <span>${entry ? entry.date : ''}</span>
       </div>
     </div>
