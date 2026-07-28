@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings — RAWABI Tank Monitor</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="name">RAWABI Tank Monitor</div>
+    <div class="sub">Tank Setup &amp; Calibration</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="nav-links">
+    <a href="index.html">Dashboard</a>
+    <a href="sounding.html">Daily Sounding</a>
+    <a href="history.html">History</a>
+    <a href="settings.html" class="active">Settings</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="card">
+    <p class="hint">
+      Each tank uses its <b>100% capacity (m³)</b> to convert a reading into volume/weight.
+      By default, daily entry uses <b>% Full</b> (no extra setup needed). If you know a tank's
+      <b>Max Sounding depth (cm)</b> — the sounding reading when the tank is completely full —
+      enter it below to enable accurate <b>cm-based</b> entry for that tank. For tanks with a
+      non-rectangular shape (peak tanks, sloped double-bottoms), add extra calibration points
+      (sounding cm → volume m³) from your sounding tables for a precise curve instead of a
+      straight line.
+    </p>
+  </div>
+
+  <div class="card">
+    <b>Backup</b>
+    <p class="hint">Export or restore all tank edits and sounding history as a JSON file.</p>
+    <div style="display:flex; gap:10px; margin-top:8px;">
+      <button id="exportBtn" class="secondary">Download Backup</button>
+      <button id="importBtn" class="secondary">Restore Backup</button>
+      <input type="file" id="importFile" accept="application/json" style="display:none">
+    </div>
+  </div>
+
+  <div id="tankTables"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="js/soundingTables.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/calc.js"></script>
+<script src="js/settings.js"></script>
+</body>
+</html>
