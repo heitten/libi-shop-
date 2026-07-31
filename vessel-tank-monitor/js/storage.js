@@ -3,6 +3,7 @@
 const LS_KEYS = {
   overrides: 'vtm_tank_overrides',   // per-tank edits: capacity, spgr, name, maxSounding, calibration, verified, mode
   soundings: 'vtm_soundings',        // { "YYYY-MM-DD": { tankId: { mode: 'percent'|'cm', value: number, note } } }
+  drafts: 'vtm_drafts',              // { fwd: number|null, aft: number|null, heel: number|null }
 };
 
 function readJSON(key, fallback) {
@@ -93,10 +94,19 @@ const Store = {
     return result;
   },
 
+  getDrafts() {
+    return readJSON(LS_KEYS.drafts, { fwd: null, aft: null, heel: null });
+  },
+
+  setDrafts(drafts) {
+    writeJSON(LS_KEYS.drafts, drafts);
+  },
+
   exportBackup() {
     return JSON.stringify({
       overrides: Store.getOverrides(),
       soundings: Store.getAllSoundings(),
+      drafts: Store.getDrafts(),
       exportedAt: new Date().toISOString(),
     }, null, 2);
   },
@@ -105,6 +115,7 @@ const Store = {
     const data = JSON.parse(json);
     if (data.overrides) writeJSON(LS_KEYS.overrides, data.overrides);
     if (data.soundings) writeJSON(LS_KEYS.soundings, data.soundings);
+    if (data.drafts) writeJSON(LS_KEYS.drafts, data.drafts);
   },
 };
 
