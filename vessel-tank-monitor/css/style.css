@@ -12,6 +12,8 @@
   --brown: #b5672e;
   --purple: #9a7fd1;
   --red: #e0483c;
+  --maroon: #8a2f4a;
+  --gray: #6b7580;
   --empty: #3a4552;
   --radius: 10px;
 }
@@ -298,7 +300,173 @@ table th { color: var(--text-dim); font-weight: 600; font-size: 0.72rem; text-tr
 
 .hint { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
 
+/* ---------- Ship-plan Overview ---------- */
+.tank-card.compact {
+  padding: 6px;
+  min-width: 76px;
+  gap: 3px;
+}
+.tank-card.compact .tk-name { font-size: 0.62rem; }
+.tank-card.compact .gauge { width: 14px; }
+.tank-card.compact .tk-stats { font-size: 0.6rem; }
+.tank-card.compact .tk-stats b { font-size: 0.66rem; }
+
+.overview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ov-top, .ov-bottom {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.ov-top-strips, .ov-bottom-strips {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.gauge-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.gauge-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ov-cmnt-col, .ov-mud-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-left: 1px dashed var(--border);
+  padding-left: 12px;
+}
+
+.ov-middle {
+  display: flex;
+  gap: 14px;
+  align-items: stretch;
+}
+.ov-left-col, .ov-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.shipplan {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+}
+.aft-bracket {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  border-right: 3px solid var(--green);
+  padding-right: 8px;
+}
+.shipplan-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.shipplan-row {
+  display: flex;
+  gap: 4px;
+}
+.chip {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6px 4px;
+  border-radius: 4px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+.chip-green { background: var(--green); color: #04231a; }
+.chip-orange { background: var(--orange); color: #2b1400; }
+.chip-blue { background: var(--blue); }
+.chip-maroon { background: var(--maroon); }
+.chip-gray { background: var(--gray); }
+
+.draft-widget {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 160px;
+}
+.draft-readouts {
+  display: flex;
+  gap: 14px;
+}
+.draft-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  cursor: pointer;
+  text-align: center;
+}
+.draft-value .draft-label {
+  display: block;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+.draft-ship-icon { font-size: 1.6rem; }
+.draft-scales {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.scale-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  cursor: pointer;
+}
+.scale-name { color: var(--text-dim); width: 32px; }
+.scale-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--empty);
+  border-radius: 3px;
+  position: relative;
+}
+.scale-marker {
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 12px;
+  background: var(--accent);
+  transform: translateX(-50%);
+}
+.scale-val { width: 34px; text-align: right; color: var(--text); }
+
 @media (max-width: 700px) {
   .sounding-row { grid-template-columns: 1fr; }
   .topbar { gap: 10px; }
+  .ov-top, .ov-middle, .ov-bottom { flex-direction: column; }
+  .aft-bracket { flex-direction: row; border-right: none; border-bottom: 3px solid var(--green); padding-right: 0; padding-bottom: 8px; }
 }
