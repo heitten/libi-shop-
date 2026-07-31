@@ -20,7 +20,9 @@ function computeReading(tank, mode, value) {
   if (value == null || isNaN(value)) return null;
 
   let volume;
-  if (mode === 'percent') {
+  if (mode === 'volume') {
+    volume = value;
+  } else if (mode === 'percent') {
     const pct = Math.max(0, Math.min(100, value));
     volume = (pct / 100) * tank.capacity;
   } else if (mode === 'cm') {

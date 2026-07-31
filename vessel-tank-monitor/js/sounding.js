@@ -38,8 +38,9 @@ function renderGroups() {
           <select class="mode-select">
             <option value="percent" ${mode === 'percent' ? 'selected' : ''}>% Full</option>
             <option value="cm" ${mode === 'cm' ? 'selected' : ''} ${cmAvailable ? '' : 'disabled'}>Sounding (cm)</option>
+            <option value="volume" ${mode === 'volume' ? 'selected' : ''}>Volume (m³)</option>
           </select>
-          <input type="number" class="value-input" step="0.1" placeholder="${mode === 'cm' ? 'cm' : '%'}" value="${e ? e.value : ''}">
+          <input type="number" class="value-input" step="0.001" placeholder="${mode === 'cm' ? 'cm' : mode === 'volume' ? 'm³' : '%'}" value="${e ? e.value : ''}">
           <div class="result">${e ? rowResultText(tank, mode, e.value) : ''}</div>
         </div>
       `;
@@ -57,7 +58,7 @@ function renderGroups() {
 
     function update() {
       const mode = select.value;
-      input.placeholder = mode === 'cm' ? 'cm' : '%';
+      input.placeholder = mode === 'cm' ? 'cm' : mode === 'volume' ? 'm³' : '%';
       const val = parseFloat(input.value);
       result.textContent = isNaN(val) ? '' : rowResultText(tank, mode, val);
     }

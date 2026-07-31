@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Import Stability Sheet — RAWABI 14 Tank Monitor</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="name">RAWABI 14 Tank Monitor</div>
+    <div class="sub">Import Stability Sheet</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="nav-links">
+    <a href="index.html">Dashboard</a>
+    <a href="sounding.html">Daily Sounding</a>
+    <a href="import.html" class="active">Import Sheet</a>
+    <a href="history.html">History</a>
+    <a href="settings.html">Settings</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="card">
+    <p class="hint">
+      Upload the vessel's <b>stability calculation workbook</b> (the same
+      "R14 Stab Calc … Dep./Arr. &lt;port&gt;.xlsx" file the Chief Officer
+      produces) and this reads its <b>Sounding Report</b> sheet — the
+      Fresh Water and Drill Water/Ballast tank readings it lists — and
+      loads them straight into the Dashboard, no retyping. Everything
+      happens in your browser; the file is never uploaded anywhere.
+    </p>
+    <p class="hint">
+      Fuel Oil, Cement and Mud tanks aren't on that report, so keep
+      logging those on <a href="sounding.html" style="color:var(--accent)">Daily Sounding</a> as usual.
+    </p>
+  </div>
+
+  <div class="card">
+    <label for="fileInput">Stability calculation workbook (.xlsx)</label>
+    <input type="file" id="fileInput" accept=".xlsx,.xls,.xlsm">
+    <p class="hint" id="fileStatus" style="margin-top:8px;"></p>
+    <label for="importDate" style="margin-top:12px;">Reading date (auto-filled from the sheet if found)</label>
+    <input type="date" id="importDate">
+  </div>
+
+  <div id="previewBox"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/vendor/xlsx.full.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/soundingTables.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/calc.js"></script>
+<script src="js/import.js"></script>
+</body>
+</html>

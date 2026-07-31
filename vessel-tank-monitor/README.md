@@ -20,8 +20,18 @@ no backend, no build step — data is stored in `localStorage`.
     real system's Overview screen but need somewhere to log readings).
   - All gauges are color-coded and flash red above 85% (high-level alarm).
 - **sounding.html** — Daily Sounding Entry. Log today's (or any date's)
-  reading per tank, either as **% Full** (works immediately) or
-  **Sounding (m)** for tanks with a factory calibration table.
+  reading per tank, either as **% Full** (works immediately),
+  **Sounding (m)** for tanks with a factory calibration table, or
+  **Volume (m³)** directly.
+- **import.html** — Import Stability Sheet. Upload the vessel's stability
+  calculation workbook (same format as `R14 Stab Calc ... .xlsx`) and it
+  reads the **Sounding Report** sheet client-side (via a vendored copy of
+  [SheetJS](js/vendor/xlsx.full.min.js), no server, no upload anywhere),
+  matches each row's tank label to the internal tank list (tolerating the
+  sheet's own typos, e.g. "DWAYBT" for "DW/BT"), previews matches, and
+  writes them straight into the Dashboard as Volume-mode readings for the
+  date found on the sheet. Only Fresh Water and Drill Water/Ballast tanks
+  are on that report — Fuel Oil/Cement/Mud still need Daily Sounding.
 - **settings.html** — Tank Setup & Calibration. Edit each tank's name,
   capacity, specific gravity, and Max Sounding depth; add multi-point
   sounding tables for non-linear tanks; export/restore a JSON backup.
